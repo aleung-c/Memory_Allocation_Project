@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strnequ.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aleung-c <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/05 16:03:52 by aleung-c         ###   ########.fr       */
+/*   Created: 2014/11/08 11:16:53 by aleung-c          #+#    #+#             */
+/*   Updated: 2014/11/08 11:28:09 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-int main(void)
+int ft_strnequ(char const *s1, char const *s2, size_t n)
 {
-	char *str;
-
-	str = ft_malloc(3);
-	// str[7] = 'a';
-	ft_strcpy(str, "test");
-
-	ft_putendl(str);
-	show_alloc_mem();
-
-	return (0);
+	if (!s1 || !s2)
+		return (0);
+	while (n - 1)
+	{
+		if (s1[n - 1] != s2[n - 1])
+			return (0);
+		n--;
+	}
+	if (s2[n - 1] != s1[n - 1])
+		return (0);
+	return (1);
 }

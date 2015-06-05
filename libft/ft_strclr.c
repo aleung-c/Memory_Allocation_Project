@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strclr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aleung-c <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/05 16:03:52 by aleung-c         ###   ########.fr       */
+/*   Created: 2014/11/05 11:29:11 by aleung-c          #+#    #+#             */
+/*   Updated: 2014/11/06 11:08:26 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-int main(void)
+void ft_strclr(char *s)
 {
-	char *str;
+	int len;
+	int i;
 
-	str = ft_malloc(3);
-	// str[7] = 'a';
-	ft_strcpy(str, "test");
-
-	ft_putendl(str);
-	show_alloc_mem();
-
-	return (0);
+	if (s)
+	{
+		i = 0;
+		len = ft_strlen(s);
+		while (i < len)
+		{
+			*s = '\0';
+			s++;
+			i++;
+		}
+	}
 }

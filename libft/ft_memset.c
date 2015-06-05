@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aleung-c <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/05 16:03:52 by aleung-c         ###   ########.fr       */
+/*   Created: 2014/11/06 14:21:16 by aleung-c          #+#    #+#             */
+/*   Updated: 2014/11/06 14:38:08 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-int main(void)
+void *ft_memset(void *b, int c, size_t len)
 {
-	char *str;
+	unsigned int	i;
+	char			*d;
 
-	str = ft_malloc(3);
-	// str[7] = 'a';
-	ft_strcpy(str, "test");
-
-	ft_putendl(str);
-	show_alloc_mem();
-
-	return (0);
+	d = b;
+	i = 0;
+	if (len == 0)
+		return (b);
+	while (i < len)
+	{
+		d[i] = (unsigned char)c;
+		i++;
+	}
+	return (b);
 }

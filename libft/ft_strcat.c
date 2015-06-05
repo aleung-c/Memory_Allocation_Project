@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aleung-c <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/05 16:03:52 by aleung-c         ###   ########.fr       */
+/*   Created: 2014/11/04 11:10:23 by aleung-c          #+#    #+#             */
+/*   Updated: 2014/11/04 13:38:52 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-int main(void)
+char *ft_strcat(char *s1, const char *s2)
 {
-	char *str;
+	unsigned int i;
+	unsigned int x;
 
-	str = ft_malloc(3);
-	// str[7] = 'a';
-	ft_strcpy(str, "test");
-
-	ft_putendl(str);
-	show_alloc_mem();
-
-	return (0);
+	i = 0;
+	x = 0;
+	while (s1[i] != '\0')
+		i++;
+	while (s2[x] != '\0')
+	{
+		s1[i] = s2[x];
+		x++;
+		i++;
+	}
+	s1[i] = '\0';
+	return (s1);
 }
