@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 15:50:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/05 16:05:57 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/08 16:00:05 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,25 @@
 
 void		show_alloc_mem()
 {
-	t_mem *tmp;
+	t_mem_chunk		*chunks;
+	t_mem_seg		*segs;
 
-	tmp = g_memzone;
-	while (tmp)
+	chunks = g_memzone.tiny;
+	if (!chunks)
+		ft_putendl("No chunks");
+	while (chunks)
 	{
-		ft_putnbr((int)tmp->ptr);
-		ft_putstr("zone mem alloue");
-		tmp = tmp->next;
+		segs = chunks->first_memseg;
+		while (segs)
+		{
+			ft_putstr("zone mem alloue : ");
+			ft_putnbr((int)segs + sizeof(t_mem_seg));
+			ft_putstr(", size = ");
+			ft_putnbr(segs->size);
+			ft_putchar('\n');
+			segs = segs->next;
+		}
+		chunks = chunks->next;
 	}
 	return ;
 }
