@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/22 13:41:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/08 17:01:06 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/09 16:37:47 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <sys/mman.h>
 # include "./libft/libft.h"
 
-# define TINY 1024
+# define TINY (size_t)(getpagesize())
 # define SMALL 4096
 
 
@@ -46,7 +46,7 @@ typedef struct				s_memzone
 	t_mem_chunk				*big;
 }							t_memzone;
 
-extern t_memzone 			g_memzone;
+extern t_memzone			g_memzone;
 
 /*
 ** Functions prototypes.
@@ -55,12 +55,12 @@ extern t_memzone 			g_memzone;
 void						free(void *ptr);
 
 void							*ft_malloc(size_t size);
-void							*allocate_mem(size_t size);
-void							*allocate_tiny(size_t size);
+char							*allocate_mem(size_t size);
+void							allocate_tiny(void);
 
-void							*search_mem(size_t size);
-void							*add_seg_to_chunk(t_mem_chunk *chunk, size_t size);
+char							*search_mem(size_t size);
+void						*add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked);
 void						*realloc(void *ptr, size_t size);
 void						show_alloc_mem();
 
-#endif	
+#endif
