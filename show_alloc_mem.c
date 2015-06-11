@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 15:50:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/11 12:33:01 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/11 15:51:14 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void		show_alloc_mem()
 		ft_putnbr((int)chunks);
 		ft_putchar('\n');
 		segs = chunks->first_memseg;
-		while (segs)
+		while (segs && segs->free == 0)
 		{
 			to_hex(output, 12, (int)segs);
 			// ft_putnbr((int)segs);

@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/22 13:41:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/09 16:37:47 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/11 13:45:18 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ extern t_memzone			g_memzone;
 ** Functions prototypes.
 */
 
-void						free(void *ptr);
+void						ft_free(void *ptr);
 
 void							*ft_malloc(size_t size);
 char							*allocate_mem(size_t size);
@@ -60,7 +60,7 @@ void							allocate_tiny(void);
 
 char							*search_mem(size_t size);
 void						*add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked);
-void						*realloc(void *ptr, size_t size);
+void						*ft_realloc2(void *ptr, size_t size);
 void						show_alloc_mem();
 
 #endif
