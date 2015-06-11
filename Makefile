@@ -6,7 +6,7 @@
 #    By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/06/04 13:38:15 by aleung-c          #+#    #+#              #
-#    Updated: 2015/06/08 11:49:45 by aleung-c         ###   ########.fr        #
+#    Updated: 2015/06/11 12:40:54 by aleung-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = test
 
 INCLUDES = malloc.h
 
-SRC = malloc.c main.c show_alloc_mem.c
+SRC = malloc.c main.c show_alloc_mem.c free.c
 
 OBJ = $(SRC:.c=.o)
 

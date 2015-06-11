@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 10:38:50 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/09 16:56:59 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/11 12:37:26 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,20 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // !! manque acces
 	else
 	{
 		tmp_segs = chunk->first_memseg;
-		while (tmp_segs->next) // ici a faire le check du free.
-			tmp_segs = tmp_segs->next;
+		while (tmp_segs)
+		{
+			if (tmp_segs->free == 1 && size_asked <= tmp_segs->size)
+			{
+				tmp_segs->free = 0;
+				chunk->size_occupied += size_asked;
+				chunk->nb_segs += 1;
+				return ((char *)tmp_segs + sizeof(t_mem_seg));
+			}
+			if (tmp_segs->next != NULL)
+				tmp_segs = tmp_segs->next;
+			else
+				break ;
+		}
 		tmp_segs->next = (t_mem_seg *)((char *)tmp_segs + tmp_segs->size + sizeof(t_mem_seg));
 		tmp_segs = tmp_segs->next;
 	}
@@ -89,14 +101,34 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // !! manque acces
 	tmp_segs->next = NULL;
 	chunk->size_occupied += size_asked + (sizeof(t_mem_seg));
 	chunk->nb_segs += 1;
-	printf("seg addr = %p\n", (char *)(tmp_segs + sizeof(t_mem_seg)));
-	return (tmp_segs + sizeof(t_mem_seg));
+	printf("seg addr = %p\n", (char *)((char *)tmp_segs + sizeof(t_mem_seg)));
+	return ((char *)tmp_segs + sizeof(t_mem_seg));
+}
+
+int check_space(t_mem_chunk *chunk, size_t size)
+{
+	size_t free_space;
+	t_mem_seg *tmp_segs;
+
+	free_space = TINY - chunk->size_occupied;
+	if ((size + sizeof(t_mem_seg)) < free_space)
+		return (1);
+	else if (size == free_space)
+	{
+		tmp_segs = chunk->first_memseg;
+		while (tmp_segs)
+		{
+			if (tmp_segs->free == 1 && size <= tmp_segs->size)
+				return (1);
+			tmp_segs = tmp_segs->next;
+		}
+	}
+	return (0);
 }
 
 char *search_mem(size_t size) // chercher liste de zones allouées pour trouver de l'espace.
 {
 	t_mem_chunk *tmp;
-	size_t free_space;
 	void *ret;
 
 	ret = NULL;
@@ -105,24 +137,16 @@ char *search_mem(size_t size) // chercher liste de zones allouées pour trouver 
 		tmp = g_memzone.tiny;
 		while (tmp)
 		{
-			free_space = TINY - tmp->size_occupied;
-			ft_putstr("search mem :\nFree space = ");
-			ft_putnbr(free_space);
-			ft_putchar('\n');
-			ft_putstr("occupied space = ");
-			ft_putnbr(tmp->size_occupied);
-			ft_putchar('\n');
-			if ((size + sizeof(t_mem_seg)) < free_space)
-			{
-				ft_putendl("size OK");
-				ret = add_seg_to_chunk(tmp, size);
-				return((char *)ret);
-			}
+				if (check_space(tmp, size) == 1)
+				{
+					ret = add_seg_to_chunk(tmp, size);
+					return((char *)ret);
+				}
 			tmp = tmp->next;
 		}
-		if (!tmp)
+		if (!tmp) // a parcouru tous les chunks.
 		{
-			ft_putendl("no space in mem, create new alloc");
+			ft_putendl("no space in mem, create new alloc"); //
 			allocate_tiny();
 			ret = search_mem(size);
 		}
