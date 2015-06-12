@@ -25,4 +25,5 @@ void	ft_free(void *ptr)
 	else if (tmp->size <= SMALL)
 		g_memzone.small->size_occupied -= tmp->size;
 	ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
+	ptr = NULL;
 }

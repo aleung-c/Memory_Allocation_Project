@@ -26,8 +26,8 @@ void	*ft_realloc2(void *ptr, size_t size)
 		ft_memcpy(recup, (char *)ptr, size);
 		ft_free(ptr);
 		new_alloc = ft_malloc(size);
-		ft_memcpy(new_alloc, ptr, size);
-		return ((char *)ptr);
+		ft_memcpy(new_alloc, recup, size);
+		return ((char *)new_alloc);
 	}
 	else if (size > tmp->size)
 	{
