@@ -6,18 +6,18 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/11 16:01:11 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/06/30 16:58:21 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <stdio.h>
+#include <stdio.h> //
 
 int main(void)
 {
 	char *str;
-	// char *str2;
-	// char *str3;
+	char *str2;
+	char *str3;
 
 	// str2 = ft_malloc(6);
 	// str3 = ft_malloc(7);
@@ -27,10 +27,21 @@ int main(void)
 	char *ptr_test;
 	// while (i != 0)
 	// {
-		ptr_test = ft_malloc(4012);
-		ptr_test = ft_realloc2(ptr_test, 12);
-		// ptr_test = ft_realloc2(ptr_test, 25);
-		str = ft_malloc(45);
+		ptr_test = ft_malloc(12);
+		str = ft_malloc(80);
+		str2 = ft_malloc(80);
+		str3 = ft_malloc(80);
+		ft_strcpy(ptr_test, "abcdefghijklmnopqr");
+		printf("%s\n", ptr_test);
+		printf("\n");
+		// ptr_test = ft_realloc2(ptr_test, 12);
+		// printf("%s\n", ptr_test);
+		// printf("\n");
+		// // ptr_test = ft_realloc2(ptr_test, 25);
+
+		// // str = ft_malloc(45);
+		// // printf("test\n");
+		printf("\n");
 		// ft_free(ptr_test);
 		// i--;
 	// }

@@ -6,11 +6,11 @@
 #    By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/06/04 13:38:15 by aleung-c          #+#    #+#              #
-#    Updated: 2015/06/11 13:45:45 by aleung-c         ###   ########.fr        #
+#    Updated: 2015/06/30 13:16:48 by aleung-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = test
+NAME = a.out
 
 INCLUDES = malloc.h
 
