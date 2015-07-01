@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/30 16:58:21 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/07/01 14:34:24 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ int main(void)
 	char *str;
 	char *str2;
 	char *str3;
-
+	
 	// str2 = ft_malloc(6);
 	// str3 = ft_malloc(7);
 	printf("Page size = %d\nSize of chunk = %d\n", (int)getpagesize(), (int)sizeof(t_mem_chunk));
 	printf("Size of seg = %d\n", (int)sizeof(t_mem_seg));
 	// int i = 100;
-	char *ptr_test;
+	 // char *ptr_test;
 	// while (i != 0)
 	// {
-		ptr_test = ft_malloc(12);
-		str = ft_malloc(80);
-		str2 = ft_malloc(80);
+		// ptr_test = ft_malloc(1);
+		str = ft_malloc(4031);
+
+		str2 = ft_malloc(1);
+		str = ft_realloc2(str, 12);
 		str3 = ft_malloc(80);
-		ft_strcpy(ptr_test, "abcdefghijklmnopqr");
-		printf("%s\n", ptr_test);
-		printf("\n");
+		// ft_strcpy(ptr_test, "abcdefghijklmnopqr");
 		// ptr_test = ft_realloc2(ptr_test, 12);
 		// printf("%s\n", ptr_test);
 		// printf("\n");
