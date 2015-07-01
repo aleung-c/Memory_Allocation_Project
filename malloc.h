@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/22 13:41:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/06/20 12:41:58 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/07/01 15:00:35 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <sys/mman.h>
 # include "./libft/libft.h"
 
-# define TINY (size_t)(getpagesize())
+# define TINY (size_t)(getpagesize()) // * 4
 # define SMALL 4096
 
 
@@ -56,6 +56,8 @@ void						ft_free(void *ptr);
 
 void							*ft_malloc(size_t size);
 char							*allocate_mem(size_t size);
+
+int								check_tiny_space(t_mem_chunk *chunk, size_t size);
 void							allocate_tiny(void);
 
 char							*search_mem(size_t size);
