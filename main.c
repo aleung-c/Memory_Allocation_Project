@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/07/01 14:49:30 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/07/09 15:07:58 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int main(void)
 {
-	// char *str;
+	// char *str_small;
 	// char *str2;
 	// char *str3;
 	
@@ -23,15 +23,15 @@ int main(void)
 	// str3 = ft_malloc(7);
 	printf("Page size = %d\nSize of chunk = %d\n", (int)getpagesize(), (int)sizeof(t_mem_chunk));
 	printf("Size of seg = %d\n", (int)sizeof(t_mem_seg));
-	int i = 1000;
-	 char *ptr_test;
+	int i = 1024;
+	 // char *ptr_test;
 	while (i != 0)
 	{
-		ptr_test = ft_malloc(24);
+		//ptr_test = ft_malloc(1024);
 		// str = ft_malloc(4031);
 
 		// str2 = ft_malloc(1);
-		// str = ft_realloc2(str, 12);
+		
 		// str3 = ft_malloc(80);
 		// ft_strcpy(ptr_test, "abcdefghijklmnopqr");
 		// ptr_test = ft_realloc2(ptr_test, 12);
@@ -44,6 +44,17 @@ int main(void)
 		// ft_free(ptr_test);
 		i--;
 	}
+	// str_small = ft_malloc(5000);
+	// str_small = ft_malloc(5000);
+	// ft_free(str_small);
+	// str_small = ft_malloc(12000);
+	// str_small = ft_malloc(24000);
+	// ft_free(str_small);
+	// str_small = ft_malloc(24000);
+	// str_small = ft_malloc(34000);
+	// ft_free(str_small);
+	// str_small = ft_malloc(44000);
+	// ptr_test = ft_malloc(11);
 	// str = ft_malloc(4012);
 	// ft_strcpy(str, "hellotest");
 	// // ft_free(str);

@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 10:38:50 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/07/01 15:01:13 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/07/09 14:31:47 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ char *allocate_mem(size_t size)
 	void *ret;
 
 	ret = NULL;
-	if ((size + sizeof(t_mem_seg)) < (TINY - sizeof(t_mem_chunk)) && g_memzone.tiny == NULL)
-		allocate_tiny();
+	// if ((size + sizeof(t_mem_seg)) < (TINY - sizeof(t_mem_chunk)) && g_memzone.tiny == NULL)
+	// 	allocate_tiny(); // obsolete.
 	ret = search_mem(size);
 	return ((char *)ret);
 }
@@ -47,7 +47,7 @@ void allocate_tiny(void)
 	ret->last_memseg = NULL;
 	if (ret == MAP_FAILED)
 	{
-		ft_putendl_fd("ERROR - mmap", 2);
+		ft_putendl_fd("ERROR - mmap tiny", 2);
 		exit(-1);
 	}
 	if (g_memzone.tiny == NULL)
@@ -63,11 +63,76 @@ void allocate_tiny(void)
 		tmp->next = ret;
 		ret->next = NULL;
 	}
-	ft_putendl("tiny chunk created.");
+	ft_putendl("tiny chunk created."); //
 	
 }
 
-void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble marcher.
+void allocate_small(void)
+{
+	t_mem_chunk *ret;
+	t_mem_chunk *tmp;
+
+	ret = mmap(0, SMALL, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	// cast pour remplir la zone chunk allouée.
+	ret->size_occupied = sizeof(t_mem_chunk);
+	ret->nb_segs = 0;
+	ret->first_memseg = NULL;
+	ret->last_memseg = NULL;
+	if (ret == MAP_FAILED)
+	{
+		ft_putendl_fd("ERROR - mmap small", 2);
+		exit(-1);
+	}
+	if (g_memzone.small == NULL)
+	{
+		ret->next = NULL;
+		g_memzone.small = ret;
+	}
+	else
+	{
+		tmp = g_memzone.small;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = ret;
+		ret->next = NULL;
+	}
+	ft_putendl("small chunk created."); //
+	
+}
+
+void allocate_big(size_t size)
+{
+	t_mem_chunk *ret;
+	t_mem_chunk *tmp;
+
+	ret = mmap(0, size + sizeof(t_mem_chunk), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	// cast pour remplir la zone chunk allouée.
+	ret->size_occupied = sizeof(t_mem_chunk);
+	ret->nb_segs = 0;
+	ret->first_memseg = NULL;
+	ret->last_memseg = NULL;
+	if (ret == MAP_FAILED)
+	{
+		ft_putendl_fd("ERROR - mmap small", 2);
+		exit(-1);
+	}
+	if (g_memzone.big == NULL)
+	{
+		ret->next = NULL;
+		g_memzone.big = ret;
+	}
+	else
+	{
+		tmp = g_memzone.big;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = ret;
+		ret->next = NULL;
+	}
+	ft_putendl("big chunk created."); //
+}
+
+void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked, size_t mem_type)
 {
 	t_mem_seg *tmp_segs;
 	t_mem_seg *tmp_next;
@@ -80,7 +145,7 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble mar
 		tmp_segs->size = size_asked;
 		chunk->size_occupied += sizeof(t_mem_seg) + size_asked;
 		chunk->first_memseg = tmp_segs;
-		if ((size_t)(TINY - chunk->size_occupied) > (size_t)sizeof(t_mem_seg))
+		if ((size_t)(mem_type - chunk->size_occupied) > (size_t)sizeof(t_mem_seg))
 		{
 			// add segment freed en bout;
 			// tmp_next = (t_mem_seg *)((char *)tmp_segs + sizeof(t_mem_seg) + size_asked);
@@ -88,7 +153,7 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble mar
 			tmp_segs->next->free = 1;
 			tmp_segs->next->next = NULL;
 			chunk->size_occupied += sizeof(t_mem_seg);
-			tmp_segs->next->size = (size_t)(TINY - chunk->size_occupied);
+			tmp_segs->next->size = (size_t)(mem_type - chunk->size_occupied);
 		}
 		printf("seg added first = %p\n", (char *)((char *)tmp_segs + sizeof(t_mem_seg)));
 		return ((char *)tmp_segs + sizeof(t_mem_seg));
@@ -122,7 +187,7 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble mar
 					tmp_segs->free = 0;
 					tmp_segs->size = size_asked;
 					chunk->size_occupied += size_asked;
-					if ((size_t)(TINY - chunk->size_occupied) > (size_t)sizeof(t_mem_seg))
+					if ((size_t)(mem_type - chunk->size_occupied) > (size_t)sizeof(t_mem_seg))
 					{
 						// add segment freed en bout
 						tmp_segs->next = (t_mem_seg *)((char *)tmp_segs + sizeof(t_mem_seg) + size_asked);
@@ -130,7 +195,7 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble mar
 						tmp_segs->next->free = 1;
 						tmp_segs->next->next = NULL;
 						chunk->size_occupied += sizeof(t_mem_seg);
-						tmp_segs->next->size = (size_t)(TINY - chunk->size_occupied);
+						tmp_segs->next->size = (size_t)(mem_type - chunk->size_occupied);
 						printf("seg added outer = %p\n", (char *)((char *)tmp_segs + sizeof(t_mem_seg)));
 					}
 					return ((char *)tmp_segs + sizeof(t_mem_seg));
@@ -143,12 +208,30 @@ void *add_seg_to_chunk(t_mem_chunk *chunk, size_t size_asked) // free semble mar
 	return (NULL);
 }
 
-int check_tiny_space(t_mem_chunk *chunk, size_t size)
+void *add_big_seg(size_t size_asked)
+{
+	t_mem_chunk *tmp;
+	t_mem_seg *ret;
+
+	tmp = g_memzone.big;
+	while (tmp->next)
+		tmp = tmp->next;
+
+	ret = (t_mem_seg *)((char *)tmp + sizeof(t_mem_chunk));
+	ret->size = size_asked;
+	ret->next = NULL;
+	ret->free = 0;
+	tmp->first_memseg = ret;
+
+	return ((char *)ret + sizeof(t_mem_seg));
+}
+
+int check_space(t_mem_chunk *chunk, size_t size, size_t mem_type)
 {
 	size_t free_space;
 	t_mem_seg *tmp_segs;
 
-	free_space = TINY - chunk->size_occupied;
+	free_space = mem_type - chunk->size_occupied;
 	if ((size + sizeof(t_mem_seg)) < free_space)
 		return (1);
 	else
@@ -170,29 +253,49 @@ char *search_mem(size_t size) // chercher liste de zones allouées pour trouver 
 	void *ret;
 
 	ret = NULL;
-	if (size + sizeof(t_mem_seg) < (TINY - sizeof(t_mem_chunk)))
+	if (size + sizeof(t_mem_seg) < (TINY - sizeof(t_mem_chunk))) // si espace requis est plus petit que TINY.
 	{
 		tmp = g_memzone.tiny;
 		while (tmp)
 		{
-				if (check_tiny_space(tmp, size) == 1)
-				{
-					ret = add_seg_to_chunk(tmp, size);
-					return((char *)ret);
-				}
+			if (check_space(tmp, size, TINY) == 1)
+			{
+				ret = add_seg_to_chunk(tmp, size, TINY);
+				return((char *)ret);
+			}
 			tmp = tmp->next;
 		}
-		if (!tmp) // a parcouru tous les chunks.
+		if (!tmp) // a parcouru tous les chunks ou first chunk.
 		{
-			ft_putendl("no space in mem, create new alloc"); //
+			ft_putendl("no space in mem, create new alloc tiny"); //
 			allocate_tiny();
 			ret = search_mem(size);
 		}
 	}
-	else if (size + sizeof(t_mem_seg) < (TINY - sizeof(t_mem_chunk)))
+	else if (size + sizeof(t_mem_seg) < (SMALL - sizeof(t_mem_chunk))) // si espace requis est plus petit que SMALL.
 	{
-
+		tmp = g_memzone.small;
+		while (tmp)
+		{
+			if (check_space(tmp, size, SMALL) == 1)
+			{
+				ret = add_seg_to_chunk(tmp, size, SMALL);
+				return((char *)ret);
+			}
+			tmp = tmp->next;
+		}
+		if (!tmp) // a parcouru tous les chunks ou first chunk.
+		{
+			ft_putendl("no space in mem, create new alloc small"); //
+			allocate_small();
+			ret = search_mem(size);
+		}
 	}
-	ft_putendl("must create SMALL"); //
+	else // BIG
+	{
+			allocate_big(size);
+			ret = add_big_seg(size);
+	}
+	// ft_putendl("must create BIG"); //
 	return ((char *)ret);
 }
