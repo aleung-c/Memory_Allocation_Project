@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/07/09 15:07:58 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/06 14:46:10 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int main(void)
 {
-	// char *str_small;
-	// char *str2;
-	// char *str3;
+	char *str;
+	char *str2;
+	char *str3;
 	
 	// str2 = ft_malloc(6);
 	// str3 = ft_malloc(7);
@@ -25,10 +25,14 @@ int main(void)
 	printf("Size of seg = %d\n", (int)sizeof(t_mem_seg));
 	int i = 1024;
 	 // char *ptr_test;
+	str = ft_malloc(42);
+	str2 = ft_malloc(12);
+	ft_free(str);
+	str3 = ft_malloc(22);
 	while (i != 0)
 	{
 		//ptr_test = ft_malloc(1024);
-		// str = ft_malloc(4031);
+		
 
 		// str2 = ft_malloc(1);
 		

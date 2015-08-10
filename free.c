@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/11 12:37:50 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/07/09 15:01:29 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/06 12:02:09 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	ft_free(void *ptr)
 {
 	t_mem_seg *tmp;
-	t_mem_chunk *tmp_chunk;
-	t_mem_chunk *tmp_chunk_big;
-	t_mem_seg *tmp_seg;
+	// t_mem_chunk *tmp_chunk;
+	// t_mem_chunk *tmp_chunk_big;
+	// t_mem_seg *tmp_seg;
 
 	if (!ptr)
 		return ;
@@ -25,52 +25,111 @@ void	ft_free(void *ptr)
 	tmp->free = 1;
 	if (tmp->size <= TINY)
 	{
-		tmp_chunk = g_memzone.tiny;
-		while (tmp_chunk)
-		{
-			tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
-			while (tmp_seg != tmp)
-				tmp_seg = tmp_seg->next;
-			if (tmp_seg == tmp)
-				tmp_chunk->size_occupied -= tmp->size;
-			tmp_chunk = tmp_chunk->next;
-		}
-		// g_memzone.tiny->size_occupied -= tmp->size; // FAUX
-		ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
+		free_tiny(tmp);
+		// tmp_chunk = g_memzone.tiny;
+		// while (tmp_chunk)
+		// {
+		// 	tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
+		// 	while (tmp_seg != tmp)
+		// 		tmp_seg = tmp_seg->next;
+		// 	if (tmp_seg == tmp)
+		// 		tmp_chunk->size_occupied -= tmp->size;
+		// 	tmp_chunk = tmp_chunk->next;
+		// }
+		// ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
 	}
 	else if (tmp->size <= SMALL)
 	{
-		tmp_chunk = g_memzone.small;
-		while (tmp_chunk)
-		{
-			tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
-			while (tmp_seg != tmp)
-				tmp_seg = tmp_seg->next;
-			if (tmp_seg == tmp)
-				tmp_chunk->size_occupied -= tmp->size;
-			tmp_chunk = tmp_chunk->next;
-		}
-		// g_memzone.small->size_occupied -= tmp->size; // FAUX
-		ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
+		free_small(tmp);
+		// tmp_chunk = g_memzone.small;
+		// while (tmp_chunk)
+		// {
+		// 	tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
+		// 	while (tmp_seg != tmp)
+		// 		tmp_seg = tmp_seg->next;
+		// 	if (tmp_seg == tmp)
+		// 		tmp_chunk->size_occupied -= tmp->size;
+		// 	tmp_chunk = tmp_chunk->next;
+		// }
+		// ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
 	}
 	else
 	{
-		tmp_chunk_big = (t_mem_chunk *)((char *)ptr - sizeof(t_mem_seg) - sizeof(t_mem_chunk));
-		// faire nettoyage de liste;
-		tmp_chunk = g_memzone.big;
-		if (!tmp_chunk->next)
-			g_memzone.big = NULL;
-		else
-		{
-			// faire boucle pour chercher chunk.
-			while (tmp_chunk)
-			{
-				if (tmp_chunk->next == tmp_chunk_big)
-					tmp_chunk->next = tmp_chunk_big->next;
-				tmp_chunk = tmp_chunk->next;
-			}
-		}
-		munmap((char *)ptr - sizeof(t_mem_seg) - sizeof(t_mem_chunk), tmp->size);
+		free_big(tmp, ptr);
+		// tmp_chunk_big = (t_mem_chunk *)((char *)ptr - sizeof(t_mem_seg)
+		// 				- sizeof(t_mem_chunk));
+		// tmp_chunk = g_memzone.big;
+		// if (!tmp_chunk->next)
+		// 	g_memzone.big = NULL;
+		// else
+		// {
+		// 	while (tmp_chunk)
+		// 	{
+		// 		if (tmp_chunk->next == tmp_chunk_big)
+		// 			tmp_chunk->next = tmp_chunk_big->next;
+		// 		tmp_chunk = tmp_chunk->next;
+		// 	}
+		// }
+		// munmap((char *)ptr - sizeof(t_mem_seg) - sizeof(t_mem_chunk), tmp->size);
 	}
 	ptr = NULL;
 }
+
+void free_tiny(t_mem_seg *tmp)
+{
+	t_mem_chunk *tmp_chunk;
+	t_mem_seg *tmp_seg;
+
+	tmp_chunk = g_memzone.tiny;
+	while (tmp_chunk)
+	{
+		tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
+		while (tmp_seg != tmp)
+			tmp_seg = tmp_seg->next;
+		if (tmp_seg == tmp)
+			tmp_chunk->size_occupied -= tmp->size;
+		tmp_chunk = tmp_chunk->next;
+	}
+	ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
+}
+
+void free_small(t_mem_seg *tmp)
+{
+	t_mem_chunk *tmp_chunk;
+	t_mem_seg *tmp_seg;
+
+	tmp_chunk = g_memzone.small;
+	while (tmp_chunk)
+	{
+		tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
+		while (tmp_seg != tmp)
+			tmp_seg = tmp_seg->next;
+		if (tmp_seg == tmp)
+			tmp_chunk->size_occupied -= tmp->size;
+		tmp_chunk = tmp_chunk->next;
+	}
+	ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
+}
+
+void free_big(t_mem_seg *tmp, void *ptr)
+{
+	t_mem_chunk *tmp_chunk;
+	t_mem_chunk *tmp_chunk_big;
+
+	tmp_chunk_big = (t_mem_chunk *)((char *)ptr - sizeof(t_mem_seg)
+					- sizeof(t_mem_chunk));
+	tmp_chunk = g_memzone.big;
+	if (!tmp_chunk->next)
+		g_memzone.big = NULL;
+	else
+	{
+		while (tmp_chunk)
+		{
+			if (tmp_chunk->next == tmp_chunk_big)
+				tmp_chunk->next = tmp_chunk_big->next;
+			tmp_chunk = tmp_chunk->next;
+		}
+	}
+	munmap((char *)ptr - sizeof(t_mem_seg) - sizeof(t_mem_chunk), tmp->size);
+}
+

@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 15:50:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/07/09 15:01:32 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/06 13:52:57 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,26 @@
 
 void to_hex(char *buffer, size_t size, unsigned n)
 {
-    size_t i;
-    size_t j;
-    char c;
-    unsigned digit;
+	size_t i;
+	size_t j;
+	char c;
+	unsigned digit;
 
-    // Print digits in the reverse order
-    for (i = 0; i < size - 1; ++i)
-    {
-        digit = n & 0xf;
-        buffer[i] = digit < 10 ? digit + '0' : digit - 10 + 'A';
-        n >>= 4;
-
-        if (n == 0)
-        {
-            break;
-        }
-    }
-
-    // Append NUL
-    buffer[i + 1] = 0;
-
-    // Reverse the string
-    for (j = 0; j < i / 2; ++j)
-    {
-        c = buffer[j];
-        buffer[j] = buffer[i - j];
-        buffer[i - j] = c;
-    }
+	for (i = 0; i < size - 1; ++i)
+	{
+		digit = n & 0xf;
+		buffer[i] = digit < 10 ? digit + '0' : digit - 10 + 'A';
+		n >>= 4;
+		if (n == 0)
+			break;
+	}
+	buffer[i + 1] = 0;
+	for (j = 0; j < i / 2; ++j)
+	{
+		c = buffer[j];
+		buffer[j] = buffer[i - j];
+		buffer[i - j] = c;
+	}
 }
 
 void		show_alloc_mem()
