@@ -6,151 +6,20 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 15:50:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/06 13:52:57 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/14 10:56:40 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <stdio.h> //
 
-void to_hex(char *buffer, size_t size, unsigned n)
+void		show_alloc_mem(void)
 {
-	size_t i;
-	size_t j;
-	char c;
-	unsigned digit;
-
-	for (i = 0; i < size - 1; ++i)
-	{
-		digit = n & 0xf;
-		buffer[i] = digit < 10 ? digit + '0' : digit - 10 + 'A';
-		n >>= 4;
-		if (n == 0)
-			break;
-	}
-	buffer[i + 1] = 0;
-	for (j = 0; j < i / 2; ++j)
-	{
-		c = buffer[j];
-		buffer[j] = buffer[i - j];
-		buffer[i - j] = c;
-	}
-}
-
-void		show_alloc_mem()
-{
-	t_mem_chunk		*chunks;
-	t_mem_seg		*segs;
 	int total_size;
-	char output[12];
 
 	total_size = 0;
-	// -------- TINY ----------- //
-	chunks = g_memzone.tiny;
-	if (!chunks)
-		ft_putendl("No chunks tiny");
-	while (chunks)
-	{
-		ft_putstr("TINY : ");
-		to_hex(output, 12, (int)chunks);
-		ft_putstr("0x");
-		ft_putstr(output);
-		ft_putchar('\n');
-		segs = chunks->first_memseg;
-		while (segs)
-		{
-			if (segs->free == 0)
-			{
-				to_hex(output, 12, (int)segs);
-				// ft_putnbr((int)segs);
-				ft_putstr("0x");
-				ft_putstr(output);
-				ft_putstr(" - ");
-				to_hex(output, 12, (int)segs + segs->size);
-				ft_putstr("0x");
-				ft_putstr(output);
-				// ft_putnbr((int)segs +  segs->size);
-				ft_putstr(" : ");
-				ft_putnbr(segs->size);
-				total_size += segs->size;
-				ft_putstr(" octets");
-				ft_putchar('\n');
-			}
-			segs = segs->next;
-		}
-		chunks = chunks->next;
-	}
-	// -------- SMALL ----------- //
-	chunks = g_memzone.small;
-	if (!chunks)
-		ft_putendl("No chunks small");
-	while (chunks)
-	{
-		ft_putstr("SMALL : ");
-		to_hex(output, 12, (int)chunks);
-		ft_putstr("0x");
-		ft_putstr(output);
-		ft_putchar('\n');
-		segs = chunks->first_memseg;
-		while (segs)
-		{
-			if (segs->free == 0)
-			{
-				to_hex(output, 12, (int)segs);
-				// ft_putnbr((int)segs);
-				ft_putstr("0x");
-				ft_putstr(output);
-				ft_putstr(" - ");
-				to_hex(output, 12, (int)segs + segs->size);
-				ft_putstr("0x");
-				ft_putstr(output);
-				// ft_putnbr((int)segs + segs->size);
-				ft_putstr(" : ");
-				ft_putnbr(segs->size);
-				total_size += segs->size;
-				ft_putstr(" octets");
-				ft_putchar('\n');
-			}
-			segs = segs->next;
-		}
-		chunks = chunks->next;
-	}
-	// -------- BIG ----------- //
-	chunks = g_memzone.big;
-	if (!chunks)
-		ft_putendl("No chunks big");
-	while (chunks)
-	{
-		ft_putstr("BIG : ");
-		to_hex(output, 12, (int)chunks);
-		ft_putstr("0x");
-		ft_putstr(output);
-		ft_putchar('\n');
-		segs = chunks->first_memseg;
-		while (segs)
-		{
-			if (segs->free == 0)
-			{
-				to_hex(output, 12, (int)segs);
-				// ft_putnbr((int)segs);
-				ft_putstr("0x");
-				ft_putstr(output);
-				ft_putstr(" - ");
-				to_hex(output, 12, (int)segs + segs->size);
-				ft_putstr("0x");
-				ft_putstr(output);
-				// ft_putnbr((int)segs + segs->size);
-				ft_putstr(" : ");
-				ft_putnbr(segs->size);
-				total_size += segs->size;
-				ft_putstr(" octets");
-				ft_putchar('\n');
-			}
-			segs = segs->next;
-		}
-		chunks = chunks->next;
-	}
-	// --------- TOTAL -------- //
+	show_tiny_mem(&total_size);
+	show_small_mem(&total_size);
+	show_big_mem(&total_size);
 	ft_putstr("Total : ");
 	ft_putnbr(total_size);
 	ft_putstr(" octets");
@@ -158,3 +27,77 @@ void		show_alloc_mem()
 	return ;
 }
 
+void		show_tiny_mem(int *total_size)
+{
+	t_mem_chunk		*chunks;
+	t_mem_seg		*segs;
+
+	chunks = g_memzone.tiny;
+	if (!chunks)
+		ft_putendl("No chunks tiny");
+	while (chunks)
+	{
+		display_chunk("TINY", chunks);
+		segs = chunks->first_memseg;
+		while (segs)
+		{
+			if (segs->free == 0)
+			{
+				display_seg(segs);
+				*total_size += segs->size;
+			}
+			segs = segs->next;
+		}
+		chunks = chunks->next;
+	}
+}
+
+void		show_small_mem(int *total_size)
+{
+	t_mem_chunk		*chunks;
+	t_mem_seg		*segs;
+
+	chunks = g_memzone.small;
+	if (!chunks)
+		ft_putendl("No chunks small");
+	while (chunks)
+	{
+		display_chunk("SMALL", chunks);
+		segs = chunks->first_memseg;
+		while (segs)
+		{
+			if (segs->free == 0)
+			{
+				display_seg(segs);
+				*total_size += segs->size;
+			}
+			segs = segs->next;
+		}
+		chunks = chunks->next;
+	}
+}
+
+void		show_big_mem(int *total_size)
+{
+	t_mem_chunk		*chunks;
+	t_mem_seg		*segs;
+
+	chunks = g_memzone.big;
+	if (!chunks)
+		ft_putendl("No chunks big");
+	while (chunks)
+	{
+		display_chunk("BIG", chunks);
+		segs = chunks->first_memseg;
+		while (segs)
+		{
+			if (segs->free == 0)
+			{
+				display_seg(segs);
+				*total_size += segs->size;
+			}
+			segs = segs->next;
+		}
+		chunks = chunks->next;
+	}
+}

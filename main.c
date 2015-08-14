@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 13:51:32 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/06 14:46:10 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/14 10:25:48 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@ int main(void)
 	printf("Page size = %d\nSize of chunk = %d\n", (int)getpagesize(), (int)sizeof(t_mem_chunk));
 	printf("Size of seg = %d\n", (int)sizeof(t_mem_seg));
 	int i = 1024;
-	 // char *ptr_test;
+	 char *ptr_test;
 	str = ft_malloc(42);
-	str2 = ft_malloc(12);
 	ft_free(str);
+	str2 = ft_malloc(12);
+	// ft_free(str2);
 	str3 = ft_malloc(22);
 	while (i != 0)
 	{
-		//ptr_test = ft_malloc(1024);
+		ptr_test = ft_malloc(1024);
 		
 
 		// str2 = ft_malloc(1);
