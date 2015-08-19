@@ -6,19 +6,20 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/22 13:41:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 15:50:25 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/19 18:16:38 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
 
+# include <stdlib.h>
 # include <unistd.h>
 # include <sys/mman.h>
 
-# define TINY (size_t)(getpagesize()) * 2
+# define TINY  2
 # define TINY_MAXALLOC 54
-# define SMALL (size_t)(getpagesize()) * 50
+# define SMALL 50
 # define SMALL_MAXALLOC 1024
 
 typedef struct				s_mem_seg
@@ -56,7 +57,7 @@ void						free_small();
 void						free_big(t_mem_seg *tmp, void *ptr);
 void						check_chunk_tiny(t_mem_chunk *chunk);
 
-void						*malloc(size_t size);
+void					*malloc(size_t size);
 char						*allocate_mem(size_t size);
 
 int							check_space(t_mem_chunk *chunk, size_t size,
