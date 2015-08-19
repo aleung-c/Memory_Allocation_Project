@@ -6,13 +6,13 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/11 12:37:50 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/14 10:34:13 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/19 13:37:52 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	ft_free(void *ptr)
+void	free(void *ptr)
 {
 	t_mem_seg	*tmp;
 
@@ -41,10 +41,12 @@ void	free_tiny(t_mem_seg *tmp)
 		while (tmp_seg != tmp)
 			tmp_seg = tmp_seg->next;
 		if (tmp_seg == tmp)
+		{
 			tmp_chunk->size_occupied -= tmp->size;
+			return ;
+		}
 		tmp_chunk = tmp_chunk->next;
 	}
-	ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
 }
 
 void	free_small(t_mem_seg *tmp)
@@ -62,7 +64,6 @@ void	free_small(t_mem_seg *tmp)
 			tmp_chunk->size_occupied -= tmp->size;
 		tmp_chunk = tmp_chunk->next;
 	}
-	ft_bzero((char *)tmp + sizeof(t_mem_seg), tmp->size);
 }
 
 void	free_big(t_mem_seg *tmp, void *ptr)

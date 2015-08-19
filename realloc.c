@@ -6,13 +6,13 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/11 12:47:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/14 10:32:46 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/19 14:13:57 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	*ft_realloc2(void *ptr, size_t size)
+void	*realloc(void *ptr, size_t size)
 {
 	t_mem_seg		*tmp;
 	void			*new_alloc;
@@ -24,16 +24,16 @@ void	*ft_realloc2(void *ptr, size_t size)
 	if (size <= tmp->size)
 	{
 		ft_memcpy(recup, (char *)ptr, size);
-		ft_free(ptr);
-		new_alloc = ft_malloc(size);
+		free(ptr);
+		new_alloc = malloc(size);
 		ft_memcpy(new_alloc, recup, size);
 		return ((char *)new_alloc);
 	}
 	else if (size > tmp->size)
 	{
-		new_alloc = ft_malloc(size);
+		new_alloc = malloc(size);
 		ft_memcpy(new_alloc, ptr, size);
-		ft_free(ptr);
+		free(ptr);
 		return ((char *)new_alloc);
 	}
 	return (NULL);

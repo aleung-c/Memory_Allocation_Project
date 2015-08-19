@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/14 10:22:34 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/14 10:25:20 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/19 15:59:25 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		allocate_tiny(void)
 	ret->first_memseg = NULL;
 	ret->last_memseg = NULL;
 	if (ret == MAP_FAILED)
-		exit(-1);
+		return ;
 	if (g_memzone.tiny == NULL)
 	{
 		ret->next = NULL;
@@ -60,7 +60,7 @@ void		allocate_small(void)
 	ret->first_memseg = NULL;
 	ret->last_memseg = NULL;
 	if (ret == MAP_FAILED)
-		exit(-1);
+		return ;
 	if (g_memzone.small == NULL)
 	{
 		ret->next = NULL;
@@ -88,7 +88,7 @@ void		allocate_big(size_t size)
 	ret->first_memseg = NULL;
 	ret->last_memseg = NULL;
 	if (ret == MAP_FAILED)
-		exit(-1);
+		return ;
 	if (g_memzone.big == NULL)
 	{
 		ret->next = NULL;

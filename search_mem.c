@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/06 10:00:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/14 10:31:33 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/08/19 11:55:51 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int			check_space(t_mem_chunk *chunk, size_t size, size_t mem_type)
 
 char		*search_mem(size_t size)
 {
-	if (size + sizeof(t_mem_seg) < (TINY - sizeof(t_mem_chunk)))
+	if (size <= TINY_MAXALLOC)
 		return ((char *)search_tiny_zone(size));
-	else if (size + sizeof(t_mem_seg) < (SMALL - sizeof(t_mem_chunk)))
+	else if (size <= SMALL_MAXALLOC)
 		return ((char *)search_small_zone(size));
 	else
 	{
