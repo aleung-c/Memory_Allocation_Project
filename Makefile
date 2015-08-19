@@ -6,39 +6,49 @@
 #    By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/06/04 13:38:15 by aleung-c          #+#    #+#              #
-#    Updated: 2015/08/14 10:53:22 by aleung-c         ###   ########.fr        #
+#    Updated: 2015/08/19 16:16:44 by aleung-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = a.out
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
-INCLUDES = malloc.h
+NAME = libft_malloc_$(HOSTTYPE).so
 
-SRC = malloc.c main.c show_alloc_mem.c free.c realloc.c search_mem.c \
-		add_seg_to_chunk.c allocate_mem.c show_alloc_mem_display.c
+CC = gcc
 
-OBJ = $(SRC:.c=.o)
+vpath %.c ./
 
-LIB = ./libft/
+SRC = malloc.c show_alloc_mem.c free.c realloc.c search_mem.c \
+add_seg_to_chunk.c allocate_mem.c show_alloc_mem_display.c \
+tools.c
 
-CC = gcc -g -Wall -Werror -Wextra
+OBJ = $(patsubst %.c, ./%.o, $(SRC))
 
-all : Lib $(NAME) $(SRC)
+CFLAGS = -Wall -Werror -Wextra
+INCS = -I./
 
-$(NAME) : $(SRC)
-	$(CC) -o $(NAME) $(SRC) -L./libft/ -lft
+RM = rm -f
 
-Lib :
-	make -C $(LIB)
+all: $(NAME)
 
-clean :
-	rm -rf $(OBJ)
-	cd $(LIB) ; make clean
+.PHONY: all clean fclean re dev
 
-fclean : clean
-	rm -rf $(NAME)
-	cd $(LIB) ; make fclean
+$(NAME): $(OBJ) ./malloc.h
+	@$(CC) -shared $(INCS) -o $(NAME) $(OBJ)
+	@ln -sf $(NAME) libft_malloc.so
 
-re : fclean all
+clean:
+	@$(RM) $(OBJ)
 
-.PHONY : all clean fclean re Lib
+fclean: clean
+	@$(RM) libft_malloc.so
+	@$(RM) $(NAME)
+
+re: fclean all
+
+./%.o: %.c
+	@$(CC) -fpic -c $(CFLAGS) $(INCS) $< -o $@
+
+.PHONY: all clean fclean re
