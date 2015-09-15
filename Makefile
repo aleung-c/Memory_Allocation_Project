@@ -6,7 +6,7 @@
 #    By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/06/04 13:38:15 by aleung-c          #+#    #+#              #
-#    Updated: 2015/08/19 18:12:32 by aleung-c         ###   ########.fr        #
+#    Updated: 2015/09/15 14:48:24 by aleung-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,11 +22,11 @@ vpath %.c ./
 
 SRC = malloc.c show_alloc_mem.c free.c realloc.c search_mem.c \
 add_seg_to_chunk.c allocate_mem.c show_alloc_mem_display.c \
-tools.c
+tools.c free_checkptr.c
 
 OBJ = $(patsubst %.c, ./%.o, $(SRC))
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -g -Wall -Werror -Wextra
 INCS = -I./
 
 RM = rm -f

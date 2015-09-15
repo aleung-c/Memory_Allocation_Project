@@ -6,18 +6,18 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/19 13:05:25 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 13:22:36 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 18:26:44 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "malloc.h"
+#include "malloc.h"
 
-void ft_putchar(char c)
+void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-void ft_putstr(char const *s)
+void	ft_putstr(char const *s)
 {
 	int i;
 
@@ -27,7 +27,7 @@ void ft_putstr(char const *s)
 	write(1, s, i);
 }
 
-void *ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	char *d;
 
@@ -46,8 +46,7 @@ void *ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-
-void ft_putnbr(int n)
+void	ft_putnbr(int n)
 {
 	if (n < 0)
 	{
@@ -63,7 +62,7 @@ void ft_putnbr(int n)
 		ft_putchar(48 + n);
 }
 
-void ft_putendl(char const *s)
+void	ft_putendl(char const *s)
 {
 	ft_putstr(s);
 	ft_putchar('\n');

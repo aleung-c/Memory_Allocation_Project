@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/05 15:50:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/14 10:56:40 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 18:10:13 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		show_tiny_mem(int *total_size)
 
 	chunks = g_memzone.tiny;
 	if (!chunks)
-		ft_putendl("No chunks tiny");
+		return ;
 	while (chunks)
 	{
 		display_chunk("TINY", chunks);
@@ -59,7 +59,7 @@ void		show_small_mem(int *total_size)
 
 	chunks = g_memzone.small;
 	if (!chunks)
-		ft_putendl("No chunks small");
+		return ;
 	while (chunks)
 	{
 		display_chunk("SMALL", chunks);
@@ -84,10 +84,10 @@ void		show_big_mem(int *total_size)
 
 	chunks = g_memzone.big;
 	if (!chunks)
-		ft_putendl("No chunks big");
+		return ;
 	while (chunks)
 	{
-		display_chunk("BIG", chunks);
+		display_chunk("LARGE", chunks);
 		segs = chunks->first_memseg;
 		while (segs)
 		{

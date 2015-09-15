@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/06 10:32:56 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 13:36:49 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 17:37:57 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		*add_seg_to_chunk(t_mem_chunk *chunk,
 		tmp_segs = chunk->first_memseg;
 		while (tmp_segs)
 		{
-			if (tmp_segs->free == 1 && tmp_segs->size > size_asked)
+			if (tmp_segs->free == 1 && tmp_segs->size >= size_asked)
 			{
 				tmp_segs->free = 0;
 				tmp_segs->size = size_asked;
@@ -61,6 +61,7 @@ void		*add_first_memseg(t_mem_chunk *chunk, size_t size_asked,
 		chunk->size_occupied += sizeof(t_mem_seg);
 		tmp_segs->next->size = (size_t)(mem_type - chunk->size_occupied);
 	}
+	chunk->nb_segs++;
 	return ((char *)tmp_segs + sizeof(t_mem_seg));
 }
 
@@ -81,6 +82,7 @@ void		*add_inner_memseg(t_mem_seg *tmp_segs, t_mem_chunk *chunk,
 		chunk->size_occupied -= tmp_segs->next->size;
 		tmp_segs->next->next = tmp_next;
 	}
+	chunk->nb_segs++;
 	return ((char *)tmp_segs + sizeof(t_mem_seg));
 }
 
@@ -99,5 +101,6 @@ void		*add_outer_memseg(t_mem_seg *tmp_segs, t_mem_chunk *chunk,
 		chunk->size_occupied += sizeof(t_mem_seg);
 		tmp_segs->next->size = (size_t)(mem_type - chunk->size_occupied);
 	}
+	chunk->nb_segs++;
 	return ((char *)tmp_segs + sizeof(t_mem_seg));
 }

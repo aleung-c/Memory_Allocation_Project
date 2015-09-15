@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/14 10:22:34 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 18:15:16 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 18:16:56 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		allocate_small(void)
 	t_mem_chunk *ret;
 	t_mem_chunk *tmp;
 
-	ret = mmap(0,(size_t) (getpagesize()) * SMALL, PROT_READ 
+	ret = mmap(0, (size_t)(getpagesize()) * SMALL, PROT_READ
 		| PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	ret->size_occupied = sizeof(t_mem_chunk);
 	ret->nb_segs = 0;

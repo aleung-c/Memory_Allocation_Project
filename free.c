@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/06/11 12:37:50 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 13:37:52 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 18:13:15 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	free(void *ptr)
 {
 	t_mem_seg	*tmp;
 
-	if (!ptr)
+	if (!ptr || ptr_isinlist(ptr) == 0)
 		return ;
 	tmp = (t_mem_seg *)((char *)ptr - sizeof(t_mem_seg));
 	tmp->free = 1;
-	if (tmp->size <= TINY)
+	if (tmp->size <= TINY_MAXALLOC)
 		free_tiny(tmp);
-	else if (tmp->size <= SMALL)
+	else if (tmp->size <= SMALL_MAXALLOC)
 		free_small(tmp);
 	else
 		free_big(tmp, ptr);
@@ -38,14 +38,16 @@ void	free_tiny(t_mem_seg *tmp)
 	while (tmp_chunk)
 	{
 		tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
-		while (tmp_seg != tmp)
-			tmp_seg = tmp_seg->next;
-		if (tmp_seg == tmp)
+		while (tmp_seg)
 		{
-			tmp_chunk->size_occupied -= tmp->size;
-			return ;
+			if (tmp_seg == tmp)
+			{
+				tmp_chunk->size_occupied -= tmp->size;
+				tmp_chunk->nb_segs--;
+				return ;
+			}
+			tmp_seg = tmp_seg->next;
 		}
-		tmp_chunk = tmp_chunk->next;
 	}
 }
 
@@ -58,10 +60,16 @@ void	free_small(t_mem_seg *tmp)
 	while (tmp_chunk)
 	{
 		tmp_seg = (t_mem_seg *)((char *)tmp_chunk + sizeof(t_mem_chunk));
-		while (tmp_seg != tmp)
+		while (tmp_seg)
+		{
+			if (tmp_seg == tmp)
+			{
+				tmp_chunk->size_occupied -= tmp->size;
+				tmp_chunk->nb_segs--;
+				return ;
+			}
 			tmp_seg = tmp_seg->next;
-		if (tmp_seg == tmp)
-			tmp_chunk->size_occupied -= tmp->size;
+		}
 		tmp_chunk = tmp_chunk->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/06 10:00:03 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/08/19 11:55:51 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/15 18:26:05 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void		*search_tiny_zone(int size)
 	tmp = g_memzone.tiny;
 	while (tmp)
 	{
-		if (check_space(tmp, size, TINY) == 1)
+		if (check_space(tmp, size, TINY * getpagesize()) == 1)
 		{
-			ret = add_seg_to_chunk(tmp, size, TINY);
+			ret = add_seg_to_chunk(tmp, size, TINY * getpagesize());
 			return ((char *)ret);
 		}
 		tmp = tmp->next;
@@ -80,9 +80,9 @@ void		*search_small_zone(int size)
 	tmp = g_memzone.small;
 	while (tmp)
 	{
-		if (check_space(tmp, size, SMALL) == 1)
+		if (check_space(tmp, size, SMALL * getpagesize()) == 1)
 		{
-			ret = add_seg_to_chunk(tmp, size, SMALL);
+			ret = add_seg_to_chunk(tmp, size, SMALL * getpagesize());
 			return ((char *)ret);
 		}
 		tmp = tmp->next;
