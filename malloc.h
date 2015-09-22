@@ -6,7 +6,7 @@
 /*   By: aleung-c <aleung-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/22 13:41:52 by aleung-c          #+#    #+#             */
-/*   Updated: 2015/09/15 18:46:03 by aleung-c         ###   ########.fr       */
+/*   Updated: 2015/09/22 12:15:01 by aleung-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <sys/mman.h>
 
-# define TINY  2
+# define TINY  4
 # define TINY_MAXALLOC 64
 # define SMALL 50
 # define SMALL_MAXALLOC 1024
